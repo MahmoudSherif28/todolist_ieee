@@ -13,11 +13,18 @@ class DatabaseConnection {
   }
 
   _onCreatingDatabase(Database database, int version) async {
-    await database.execute(
-        '''CREATE TABLES categories(
+    await database.execute('''CREATE TABLES categories(
         id INTEGER PRIMARY KEY,
         task TEXT,
         date TEXT
         )''');
+    await database.execute('''CREATE TABLES todo(
+      id INTEGER PRIMARY KEY,
+      title TEXT,
+      description TEXT,
+      category TEXT,
+      todoDate TEXT,
+      isFinished INTEGER,
+      ''');
   }
 }

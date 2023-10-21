@@ -80,6 +80,11 @@ class _CategoriesScreanState extends State<CategoriesScrean> {
                     _category.task = _categorynamecontroller.text;
                     _category.date = _categorydescreptioncontroller.text;
                     var result = await _categoryservice.savecategory(_category);
+                    if(result>0){
+                      print(result);
+                      Navigator.pop(context);
+                      getAllCategories();
+                    }
                   },
                   child: Text("save", style: TextStyle(color: Colors.blue))),
             ],
@@ -167,6 +172,45 @@ class _CategoriesScreanState extends State<CategoriesScrean> {
         });
   }
 
+  _deleteFormdialog(BuildContext context,catoegoryId) {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (param) {
+          return AlertDialog(
+            actions: [
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white)),
+                onPressed: () => Navigator.pop(context),
+
+                child: Text(
+                  "cancel",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white)),
+                  onPressed: () async {
+
+                    var result = await _categoryservice.deletecategory(catoegoryId);
+                    if(result>=0){
+                      Navigator.pop(context);
+                      getAllCategories();
+                    }
+                  },
+                  child: Text("delete", style: TextStyle(color: Colors.blue))),
+            ],
+            title: Text("delete Category ?"),
+  
+          );
+        });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,7 +243,9 @@ class _CategoriesScreanState extends State<CategoriesScrean> {
                   children: [
                     Text(_categoryList[index].task),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _deleteFormdialog(context,_categoryList[index].id);
+                        },
                         icon: Icon(
                           Icons.delete_forever_rounded,
                           color: Colors.red,
